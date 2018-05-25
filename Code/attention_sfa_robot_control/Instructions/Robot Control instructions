@@ -1,0 +1,55 @@
+Instructions to start Robot Control Node on actual robot
+
+
+1. Check if the robot batteries are in place. In case not, kindly insert 2 lead acid batteries. 
+
+2. Turn on the robot power using the tiny switch near the left back wheel. 
+
+3. Connect the white USB cable into a USB 2.0 slot. Do this only when the robot has been turned on. 
+
+4. Connect the Xtion camera into USB 3.0 slot. 
+
+5. Connect the Lidar Ethernet cable. Under "Kabelnetzwerke", select SICK LMS 100. 
+
+6. Commands to start the robot
+
+6.1. roslaunch robocup_launch p3at_attention.launch
+\\ to start ROS on this laptop 
+
+6.2. rostopic pub /GETbot/cmd_motor_state p2os_driver/MotorState "state: 1" -1
+ \\ to activate the robot motors 
+
+6.3. rosrun attention_sfa_robot_control robot_control
+\\ starts the robot control node 
+Note: For the actual robot, the following changes to the code have to be made:
+
+// compute x and y component of avoid-obstacle vector
+		double x = cos (angle) *  -magnitude;
+		double y = sin (angle) *  -magnitude;
+
+6.4 rqt 
+\\ robot control and spatialGNG settings can be changed
+Set soi = 1 
+gain_goal = 450 
+gain_avoid = 200 
+max_speed = 0.2 
+
+6.5. rosrun spatial_attention_gng SpatialAttentionGNG
+
+\\ starts the SpatialAttentionGNG node
+
+6.6. roslaunch attention_sfa_action_classifiers classifier_spatialGNG.launch classifier_mode:="test" 
+
+\\ starts attention classifier
+
+6.7. roslaunch affordance_gng affordance.launch
+
+\\ starts the affordance node 
+
+6.8. roslaunch attention_sfa_action_classifiers classifier_doorAffordance.launch csv:="final_doorAffordance + "/data"" classifier_mode:="test"
+
+\\ starts the affordance classifier. If it gives errors, check if the python file is an executable
+
+6.9. 	ROS_NAMESPACE=GETbot rosrun tf_mapper mapping_test
+
+\\ gives a map of the robot movement. Stop the node to get the complete graph. The graph can be found in the user directory. 

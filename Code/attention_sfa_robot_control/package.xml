@@ -1,0 +1,30 @@
+<package format="2">
+	<name>attention_sfa_robot_control</name>
+	
+	<description>
+		ros package simple obstacle avoidance
+	</description>
+
+	<author>Sahil Lopes</author>
+
+	<license>GET Lab</license>
+
+	<url>http://getwww.uni-paderborn.de</url>
+
+	<version>1.0.0</version>
+	
+	<maintainer email="slopes@get.uni-paderborn.de">Sahil Lopes</maintainer>
+
+	<buildtool_depend>catkin</buildtool_depend>
+	
+	<depend>dynamic_reconfigure</depend>
+	<depend>geometry_msgs</depend>
+	<depend>message_filters</depend>
+	<depend>nav_msgs</depend>
+	<depend>roscpp</depend>
+	<depend>sensor_msgs</depend>
+	<depend>std_msgs</depend>
+	<depend>tf</depend>
+		
+	<depend>attention_signal</depend>>
+</package>

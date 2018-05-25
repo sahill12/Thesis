@@ -1,0 +1,48 @@
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="true"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="extra_gazebo_args" default=""/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="true"/>
+  <arg name="debug" default="false"/>
+  <arg name="physics" default="ode"/>
+  <arg name="verbose" default="false"/>
+  <arg name="tf_prefix" default="GETbot"/>
+
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find attention_sfa_simulation)/worlds/sfa_affordance.world"/> 
+    <arg name="paused" value="false"/>
+
+    <!-- more default parameters can be changed here -->
+  </include>
+
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description"
+         command="rosrun xacro xacro --inorder '$(find getbot_description)/urdf/getbot.xacro' tf_prefix:=$(arg tf_prefix)" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+	args="-urdf -model getbot -param robot_description -namespace $(arg tf_prefix) -robotNamespace $(arg tf_prefix) -z 0.2 -y -36 -Y 1.57079632679"/>
+
+	  
+  <!-- <node name="teleop" pkg="teleop" type="tele_op_node">
+	<remap from="cmd_vel" to="/GETbot/cmd_vel" />
+  </node> -->
+  
+  <!-- <node respawn="true" pkg="joy" type="joy_node" name="joy_node" >
+	<param name="dev" type="string" value="/dev/input/js0" />
+	 <param name="deadzone" value="0.12" /> 
+  </node> -->	  
+
+  <include file="$(find getbot_control)/launch/getbot_control.launch" />
+  <node name="simluate_environment" pkg="attention_sfa_simulation" type="simulate_environment.py" />
+
+
+
+  
+  	  
+</launch>
